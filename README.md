@@ -6,3 +6,5 @@ Funkcjonalności:
 - Statystyka wygranych.
 - Zapis/odczyt stanu gry.
 - Jedna zaproponowane przez grupę.
+
+Jedna zaproponowane przez grupę:
