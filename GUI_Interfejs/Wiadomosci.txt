@@ -1,0 +1,4 @@
+Tutaj umieszczamy wszystko związane z interfejsem GUI. Pliki takie jak:
+- muzyka
+- zdjęcia
+- kod w Python
