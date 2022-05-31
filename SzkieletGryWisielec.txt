@@ -1,0 +1,44 @@
+Wyświetlacz w Pygame
+Input z Klawiatury
+
+Menu:
+
+  Muzyka do menu (mr funnybones)
+
+  Jakaś Grafika
+
+  Poziom trudności -> Kategorie 1 2 3 4 lub wszytskie
+
+  Zapis Gry, czyli ilość Wygranych/Przegranych
+
+W Grze:
+
+  Muzyka do tła: (coś z newgrounds)
+
+  Wyświetl stan szubienicy: 
+  wegłdug skuch (0-6)
+
+  display the blanks "_" for the word # miejsca na literki
+
+  display the category of the word and the difficulty # Wystarczy napis
+
+  display the alphabet and cross out the letters which were already guessed # Alhpabet jako cała klawiatura
+
+  Przekreślenie X lub Fajeczka jako warstwa nad grafiką alfabetu po zgadnięciu literki (X nie było w słowie/Fajeczka Było)
+
+  if liczba skuch == 6 or
+
+  if secret_word == guessed_word
+
+Po Grze:
+
+  display game over screen
+
+  win / lose
+
+  win music / lose music
+
+  press enter to return to menu # Napis
+
+
+
