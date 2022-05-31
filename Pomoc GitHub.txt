@@ -1,0 +1,19 @@
+GitHub Pomoc
+
+Jeżeli chce coś pobrać z repo:
+	$git pull
+
+Jeżeli chce coś zuploadować:
+	$git add .    lub $git add 'nazwa pliku'
+	$git commit -m 'dowolny komentarz do commita'
+	$git push
+	
+Jeżeli wyskoczy FATAL przy $git push:
+	$git fetch
+	$git pull 
+	klikam 'i'
+	napisz wiadomość merge
+	naciśnij esc
+	napisz ':wq'
+	naciśnij enter
+Po tym mozna normalnie $git push
