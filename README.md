@@ -8,3 +8,5 @@ Funkcjonalności:
 - Jedna zaproponowane przez grupę.
 
 Jedna zaproponowane przez grupę:
+
+Im szybciej odgadniemy hasło tym więcej punktów jesteśmy  w stanie zdobyć, czas ten określa również długość rundy. Można to zastosować do końcowej statystyki.
