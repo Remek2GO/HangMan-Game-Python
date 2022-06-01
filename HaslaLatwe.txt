@@ -1,5 +1,11 @@
-łatwe:
-Chomik Hipopotam Pingwin Wieloryb Lampart Nietoperz Anakonda Aligator x
-Japonki Gitara Firanka Czapka Czajnik Namiot Zabawka Komputer x
-Limonka Truskawka Rzodkiewka Mandarynka Pietruszka Winogrona Marchewka Czosnek x
-Francja Niemcy Japonia Holandia Polska NOrwegia Portugalia Hiszpania x
+Zwierzęta
+Chomik Hipopotam Pingwin Wieloryb Lampart Nietoperz Anakonda Aligator 
+
+Rzeczy
+Japonki Gitara Firanka Czapka Czajnik Namiot Zabawka Komputer 
+
+Owoce i Warzywa
+Limonka Truskawka Rzodkiewka Mandarynka Pietruszka Winogrona Marchewka Czosnek 
+
+Państwa
+Francja Niemcy Japonia Holandia Polska Norwegia Portugalia Hiszpania 
