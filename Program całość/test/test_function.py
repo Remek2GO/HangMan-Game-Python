@@ -5,6 +5,8 @@
 import unittest
 from main import *
 
+lista_zapisanych_graczy = {}
+aktualny_gracz = 0
 
 
 class MakeResultTestCase(unittest.TestCase):
@@ -19,7 +21,13 @@ class MakeResultTestCase(unittest.TestCase):
         dostepne_kategorie = {1: "Zwierzeta", 2: "Rzeczy", 3: "Owoce i Warzywa", 4: "Panstwa"}
         result = choose_category(dostepne_kategorie)
         self.assertEqual(result, 1)
-  
+    def test_save_result(self):
+        aktualny_gracz = 1
+        lista_zapisanych_graczy = {'1': ['kamil', 'maj', 4]}
+        to_test(aktualny_gracz, lista_zapisanych_graczy)
+        save_result(50)
+        self.assertEqual(lista_zapisanych_graczy, {'1': ['kamil', 'maj', 54]})
+
 
 
 
