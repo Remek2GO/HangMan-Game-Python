@@ -127,7 +127,20 @@ def start() ->int:
     global lista_zapisanych_graczy
     dostepne_poziomy = {1: "Łatwy poziom trudności", 2: "Średni poziom trudnośći", 3: "Wysoki poziom trudności"}
     dostepne_kategorie = {1: "Zwierzeta", 2: "Rzeczy", 3: "Owoce i Warzywa", 4: "Panstwa"}
+
     begin_game()
+    poczatkowy_wybor = int(input("Wybierz:\n"
+                             "1 : Rospoccznik grę\n"
+                             "2 : Zobacz Ranking\n"
+                             "3 : Wyjdź\n"
+                             "W pisz i zatwierdź enterem: "))
+    print("\n")
+    if poczatkowy_wybor == 2:
+        ranking_game()
+        start()
+    elif poczatkowy_wybor == 3:
+        return 0
+    print("\n")
     tworzenie = ask_creat_account()
     if tworzenie == 0:
         aktualny_gracz = choose_own_profil()
@@ -146,7 +159,7 @@ def start() ->int:
         print("\n\n")
         guess_password(password)
         ask_next_game = end_game()
-    return 0
+    return start()
 #************************************************************************************************
 
 
@@ -300,6 +313,29 @@ def end_game() -> int:
         return 0
     else:
         return 1
+#************************************************************************************************
+
+#***************************RANKING GRY*****************************************************
+def ranking_game() -> None:
+    lista_zapisanych_graczy_pomocnicza = lista_zapisanych_graczy
+    miejsce = 1
+    max_key = ""
+    print("RANKING GRY!!!")
+    while lista_zapisanych_graczy_pomocnicza != {}:
+        aktualny_wartosc = 0
+        for key in lista_zapisanych_graczy_pomocnicza.keys():
+            if lista_zapisanych_graczy_pomocnicza[key][2] > aktualny_wartosc:
+                aktualny_wartosc = lista_zapisanych_graczy_pomocnicza[key][2]
+                max_key = key
+        print(miejsce,". ",'{0:30s} {1:<2.0f}'.format(lista_zapisanych_graczy[str(max_key)][0] +" "+ lista_zapisanych_graczy[str(max_key)][1], aktualny_wartosc))
+
+        miejsce += 1
+        del lista_zapisanych_graczy_pomocnicza[str(max_key)]
+    print("\n")
+    input("Aby wyjść wciśnij dowolny klawisz a następnie enter")
+
+
+
 #************************************************************************************************
 
 
