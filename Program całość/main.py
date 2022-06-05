@@ -4,6 +4,7 @@
 
 import linecache
 import random
+from typing import Optional
 
 
 
@@ -139,7 +140,7 @@ def start() ->int:
         ranking_game()
         start()
     elif poczatkowy_wybor == 3:
-        return 0
+        return exit(0)
     print("\n")
     tworzenie = ask_creat_account()
     if tworzenie == 0:
@@ -262,29 +263,35 @@ def ask_creat_account() -> int:
     result = 1 if "nie" in resul else 0
     if result == 1:
         nick = input("Aby stworzyć gracza wpisz imie i nazwisko:")
-        nick = nick.split(" ")
-        creat_account(nick[0], nick[1])
+        if nick.find(" ") == -1:
+            nick_1 = [nick]
+            creat_account(nick_1[0], "")
+
+        else:
+            nick = nick.split(" ")
+            creat_account(nick[0], nick[1])
+
         return 1
     else:
         return 0
 
 
-def creat_account(name: str, surname: str) -> None:
+def creat_account(name: Optional[str], surname: Optional[str]) -> None:
     global aktualny_gracz
     liczba_graczy = len(lista_zapisanych_graczy)
     lista_zapisanych_graczy[str(liczba_graczy+1)] = [name, surname, 0]
     aktualny_gracz = liczba_graczy + 1
     print("Witaj! ", lista_zapisanych_graczy[str(aktualny_gracz)][0] +" "+ lista_zapisanych_graczy[str(aktualny_gracz)][1])
-
-
 #***************************WCZYTANIE ZAPISANYCH WYNIKÓW*****************************************************
 def begin_game() -> None:
     with open("Zapis i Odczyt") as file:
         wynik = 0
         for line in file:
             lin = line.split(" ")
-            wynik = int(lin[3])
-            lista_zapisanych_graczy[lin[0][0]] = [lin[1],lin[2], wynik]
+            if len(lin) == 4:
+                wynik = int(lin[3])
+                lista_zapisanych_graczy[lin[0][:-1]] = [lin[1],lin[2], wynik]
+
 #************************************************************************************************
 
 
