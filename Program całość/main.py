@@ -5,6 +5,9 @@
 import linecache
 import random
 from typing import Optional
+from GUI import *
+import pygame
+
 
 
 
@@ -82,20 +85,13 @@ def choose_password(poziom, kategoria) -> str:
 # ***************************WYBÓR KATEGORI**********************************************
 
 def choose_category(dostepne_kategorie: dict):
-    kategoria = int(input("Wybierz Kategorie:\n"
-                          "Wpisz liczbę od 1-5 a następmnie wciśnij enter\n"
-                          "1 - Zwierzęta\n"
-                          "2 - Rzeczy\n"
-                          "3 - Owoce i Warzywa\n"
-                          "4 - Państwa\n"
-                          "5 - Losowo\n"
-                          "Wpisz i zaakceptuj:"))
+    kategoria = choose_category_gui()
+    pygame.display.update()
     if kategoria == 5:
+
         losowy = random.randint(1, 4)
         print("Wybraliśmy za ciebie kategorie: ", dostepne_kategorie[losowy])
         kategoria = losowy
-    else:
-        print("Wybrałeś kategorie: ", dostepne_kategorie[kategoria])
 
     return kategoria
 #************************************************************************************************
@@ -105,19 +101,12 @@ def choose_category(dostepne_kategorie: dict):
 # ***************************WYBÓR POZIOMU TRUDNOŚCI**********************************************
 
 def choose_level(dostepne_poziomy: dict):
-    trudnosc = int(input("Wybierz Poziom Trudności:\n"
-                          "Wpisz 1,2 lub 3 a następmnie wciśnij enter\n"
-                          "1 - Łatwy\n"
-                          "2 - Średni\n"
-                          "3 - Trudny\n"
-                          "4 - Losowo\n"
-                          "Wpisz i zaakceptuj:"))
+    pygame.display.update()
+    trudnosc = choose_level_gui()
+    print(trudnosc)
     if trudnosc == 4:
         losowy = random.randint(1,3)
-        print("Wybraliśmy za ciebie: ", dostepne_poziomy[losowy])
         trudnosc = losowy
-    else:
-        print("Wybrałeś: ", dostepne_poziomy[trudnosc] )
 
     return  trudnosc
 #************************************************************************************************
@@ -130,18 +119,14 @@ def start() ->int:
     dostepne_kategorie = {1: "Zwierzeta", 2: "Rzeczy", 3: "Owoce i Warzywa", 4: "Panstwa"}
 
     begin_game()
-    poczatkowy_wybor = int(input("Wybierz:\n"
-                             "1 : Rospoccznik grę\n"
-                             "2 : Zobacz Ranking\n"
-                             "3 : Wyjdź\n"
-                             "W pisz i zatwierdź enterem: "))
-    print("\n")
+    poczatkowy_wybor = start_gui()
+
     if poczatkowy_wybor == 2:
         ranking_game()
         start()
     elif poczatkowy_wybor == 3:
         return exit(0)
-    print("\n")
+
     tworzenie = ask_creat_account()
     if tworzenie == 0:
         aktualny_gracz = choose_own_profil()
@@ -242,27 +227,21 @@ def to_test(x, y) -> None:
 
 #***************************ZNAJDOWANIE GRACZA*****************************************************
 def choose_own_profil() -> int:
-    save_dict = {}
-    with open("Zapis i Odczyt") as file:
-        for line in file:
-            if ":" in line:
-                save = line.split(" ")
-                save_dict[int(save[0][0])] = save[1] + " " + save[2]
-
-    for key, value in save_dict.items():
-        print(key,":", value)
-
-    wybor = input("Wpisz liczbę całkowitą występującą obok twojego niku,\nJeśli się nie znalazłeś wpisz 0: ")
+    wybor = choose_own_profil_gui()
+    pygame.display.update()
+    print(wybor)
+    # wybor = input("Wpisz liczbę całkowitą występującą obok twojego niku,\nJeśli się nie znalazłeś wpisz 0: ")
     return int(wybor)
 #************************************************************************************************
 
 
 #***************************TWORZENIE GRACZA*****************************************************
 def ask_creat_account() -> int:
-    resul = input("Masz konto?\nWpisz tak lub nie:")
-    result = 1 if "nie" in resul else 0
+    result = account()
+    pygame.display.update()
     if result == 1:
-        nick = input("Aby stworzyć gracza wpisz imie i nazwisko:")
+        nick = creat_account_gui()
+        nick = str(nick)
         if nick.find(" ") == -1:
             nick_1 = [nick]
             creat_account(nick_1[0], "")
@@ -327,19 +306,11 @@ def ranking_game() -> None:
     lista_zapisanych_graczy_pomocnicza = lista_zapisanych_graczy
     miejsce = 1
     max_key = ""
-    print("RANKING GRY!!!")
-    while lista_zapisanych_graczy_pomocnicza != {}:
-        aktualny_wartosc = 0
-        for key in lista_zapisanych_graczy_pomocnicza.keys():
-            if lista_zapisanych_graczy_pomocnicza[key][2] > aktualny_wartosc:
-                aktualny_wartosc = lista_zapisanych_graczy_pomocnicza[key][2]
-                max_key = key
-        print(miejsce,". ",'{0:30s} {1:<2.0f}'.format(lista_zapisanych_graczy[str(max_key)][0] +" "+ lista_zapisanych_graczy[str(max_key)][1], aktualny_wartosc))
-
-        miejsce += 1
-        del lista_zapisanych_graczy_pomocnicza[str(max_key)]
-    print("\n")
-    input("Aby wyjść wciśnij dowolny klawisz a następnie enter")
+    wyjdz = 0
+    pygame.display.update()
+    wyjdz = ranking(lista_zapisanych_graczy)
+    if wyjdz == 1:
+        start()
 
 
 
