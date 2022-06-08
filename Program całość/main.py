@@ -13,6 +13,8 @@ import pygame
 
 lista_zapisanych_graczy = {}
 aktualny_gracz = 0
+kategotia = ""
+poziom = ""
 
 # ********************WYBÓR HASŁA WEDŁUG TRUDNOŚCI I KATEGORI**********************:
 
@@ -27,7 +29,7 @@ def choose_a_word_easy(kategoria_hasla: str) -> str:
 
     wiersz_hasel = wiersz_hasel.split(" ")
     liczba_slow = len(wiersz_hasel)
-    losowa_liczba = random.randint(0, liczba_slow - 1)
+    losowa_liczba = random.randint(0, liczba_slow - 2)
     haslo_result = wiersz_hasel[losowa_liczba]
 
     return haslo_result
@@ -43,7 +45,7 @@ def choose_a_word_medium(kategoria_hasla: str) -> str:
 
     wiersz_hasel = wiersz_hasel.split(" ")
     liczba_slow = len(wiersz_hasel)
-    losowa_liczba = random.randint(0, liczba_slow - 1)
+    losowa_liczba = random.randint(0, liczba_slow - 2)
     haslo_result = wiersz_hasel[losowa_liczba]
 
     return haslo_result
@@ -60,7 +62,7 @@ def choose_a_word_high(kategoria_hasla: str) -> str:
 
     wiersz_hasel = wiersz_hasel.split(" ")
     liczba_slow = len(wiersz_hasel)
-    losowa_liczba = random.randint(0, liczba_slow - 1)
+    losowa_liczba = random.randint(0, liczba_slow - 2)
     haslo_result = wiersz_hasel[losowa_liczba]
 
     return haslo_result
@@ -85,6 +87,7 @@ def choose_password(poziom, kategoria) -> str:
 # ***************************WYBÓR KATEGORI**********************************************
 
 def choose_category(dostepne_kategorie: dict):
+    global kategotia
     kategoria = choose_category_gui()
     pygame.display.update()
     if kategoria == 5:
@@ -92,6 +95,8 @@ def choose_category(dostepne_kategorie: dict):
         losowy = random.randint(1, 4)
         print("Wybraliśmy za ciebie kategorie: ", dostepne_kategorie[losowy])
         kategoria = losowy
+
+    kategotia = dostepne_kategorie[kategoria]
 
     return kategoria
 #************************************************************************************************
@@ -101,12 +106,14 @@ def choose_category(dostepne_kategorie: dict):
 # ***************************WYBÓR POZIOMU TRUDNOŚCI**********************************************
 
 def choose_level(dostepne_poziomy: dict):
+    global poziom
     pygame.display.update()
     trudnosc = choose_level_gui()
     print(trudnosc)
     if trudnosc == 4:
         losowy = random.randint(1,3)
         trudnosc = losowy
+    poziom = dostepne_poziomy[trudnosc]
 
     return  trudnosc
 #************************************************************************************************
@@ -139,68 +146,26 @@ def start() ->int:
     ask_next_game = 1
     while ask_next_game == 1:
         poziom = choose_level(dostepne_poziomy)
-        print("\n\n")
         kategoria = choose_category(dostepne_kategorie)
         password = choose_password(poziom, dostepne_kategorie[kategoria])
-        print("\n\n")
-        guess_password(password)
-        ask_next_game = end_game()
+        zasady_gry()
+        result = guess_password(password)
+        ask_next_game = end_game(result[1])
     return start()
 #************************************************************************************************
 
 
 #***************************ZGADYWANIE HASŁA*****************************************************
 def guess_password(password) -> int:
-    l_zyc = 6
-    dlugosc_slowa_na_poczatku = len(password)
-    password = password.lower()
-    wynik = []
-    slowo = {}
-    zgadywane = []
-    # print(password)
-    d_slowa = len(password)
-
-    for i in range(0, d_slowa):
-        slowo[i] = password[i]
-        wynik.extend("_")
-    # print(slowo)
-    for char in wynik:
-        print(char, " ", end="")
-    print("\npowodzenia w zgadywaniu: ")
-    while l_zyc > 0 and d_slowa > 0:
-        traf = 0
-        ilosc_trafionych_liter = 0
-        wpisany_znak = input("\nwpisz wybraną literę a następnie zatwierdź:")
-        if wpisany_znak in zgadywane:
-            print("już podałeś tą litere :(")
-            continue
-        else:
-            zgadywane.extend(wpisany_znak)
-
-        for key, value in slowo.items():
-            if value == wpisany_znak:
-                wynik[key] = value
-                traf = 1
-                ilosc_trafionych_liter += 1
-        if traf == 1:
-            print("trafiony!")
-            d_slowa = d_slowa -ilosc_trafionych_liter
-        else:
-            print("pudło!")
-            l_zyc = l_zyc - 1
-        for char in wynik:
-            print(char, " ", end="")
-
-    if l_zyc > 0:
-        print("\nBrawo udało ci się, Świetna robota!!")
-    else:
-        print("\nNastępnym razem na pewno pójdzie ci lepiej!!")
-
-    print("twoja liczba punktów to:")
-    uzyskany_wynik = make_result(l_zyc, d_slowa, dlugosc_slowa_na_poczatku)
+    global kategotia
+    global poziom
+    gracz = lista_zapisanych_graczy[str(aktualny_gracz)]
+    uzyskany_wynik = zgadywanie_gui(password, gracz, poziom, kategotia)
     print(uzyskany_wynik)
-    save_result(uzyskany_wynik)
-
+    save_result(uzyskany_wynik[0])
+    end_game(uzyskany_wynik[1])
+    poziom = ""
+    kategotia = ""
     return uzyskany_wynik
 
 
@@ -291,9 +256,8 @@ def save_game() -> None:
 
 
 #***************************ZAKOŃCZENIE GRY*****************************************************
-def end_game() -> int:
-    resul = input("Che chcesz zagrać jeszce raz ? Wpisz tak lub nie: ")
-    result = 1 if "nie" in resul else 0
+def end_game(result) -> int:
+
     if result == 1:
         save_game()
         return 0

@@ -4,6 +4,7 @@
 
 import pygame, sys
 from copy import deepcopy
+from main import make_result
 
 pygame.init()
 window = pygame.display.set_mode((800, 600))
@@ -20,6 +21,13 @@ class Object:
 
     def draw_object(self, window):
         window.blit(self.button_immage, (self.x_cord, self.y_cord))
+
+class ObjectX:
+    def __init__(self, file_name):
+        self.button_immage = pygame.image.load(f"{file_name[:-4]}.png")
+
+    def draw_object(self, window, x_cord, y_cord ):
+        window.blit(self.button_immage, [x_cord, y_cord])
 
 class Button:
     def __init__(self, x_cord, y_cord, file_name):
@@ -51,6 +59,16 @@ class ButtonWrite:
         if self.hitbox.collidepoint(pygame.mouse.get_pos()):
             if pygame.mouse.get_pressed()[0]:
                 return True
+class ButtonGuess:
+    def __init__(self, x_cord, y_cord):
+        self.x_cord = x_cord
+        self.y_cord = y_cord
+        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, 40, 40)
+
+    def tick(self):
+        if self.hitbox.collidepoint(pygame.mouse.get_pos()):
+            if pygame.mouse.get_pressed()[0]:
+                return True
 
 class Blank:
     def __init__(self, file_name_menu):
@@ -68,8 +86,8 @@ def start_gui() -> int:
     pygame.time.delay(100)
     pygame.display.update()
     tlo_1 = Blank('zdjecia_interfejs/menu.png')
-    rozpocznij_gre_button = Button(275, 250, "zdjecia_interfejs/rozpocznij_gre.png")
-    zobacz_ranking_buton = Button(275, 250 + 75, "zdjecia_interfejs/zobacz_ranking.png")
+    rozpocznij_gre_button = Button(275, 250, "zdjecia_interfejs/przycisk_rozpocznij.png")
+    zobacz_ranking_buton = Button(275, 250 + 75, "zdjecia_interfejs/przycisk_ranking.png")
     wyjdz_buton = Button(275, 250 + 75+75, "zdjecia_interfejs/wyjdz.png")
 
     while True:
@@ -117,10 +135,9 @@ def account():
 def ranking(lista_zapisanych_graczy) -> int:
     pygame.time.delay(100)
     pygame.display.update()
-    tlo = Blank('zdjecia_interfejs/tlo.png')
-    tlo_ranking = Object(275,50,'zdjecia_interfejs/ranking.png')
+    tlo = Blank('zdjecia_interfejs/Ranking.png')
     wyjdz_ranking_button = Button(520, 520, "zdjecia_interfejs/wyjdz.png")
-    font = pygame.font.SysFont("Comic Sans MS", 18)
+    font = pygame.font.SysFont("Comic Sans MS", 24)
 
     while True:
         miejsce = 1
@@ -131,7 +148,6 @@ def ranking(lista_zapisanych_graczy) -> int:
             if event.type == pygame.QUIT:
                 sys.exit(0)
         tlo.draw_menu(window)
-        tlo_ranking.draw_object(window)
         wyjdz_ranking_button.draw(window)
 
         lista_zapisanych_graczy_pomocnicza = deepcopy(lista_zapisanych_graczy)
@@ -148,7 +164,7 @@ def ranking(lista_zapisanych_graczy) -> int:
             window.blit(text, [250, y_pos])
             window.blit(wynik, [500, y_pos])
             del lista_zapisanych_graczy_pomocnicza[str(max_key)]
-            y_pos += 20
+            y_pos += 29
 
         wyjdz_ranking_button.draw(window)
 
@@ -203,13 +219,13 @@ def creat_account_gui() -> list:
 
 def choose_own_profil_gui() -> int:
     pygame.time.delay(100)
-    tlo = Blank('zdjecia_interfejs/tlo.png')
-    tlo_wybierz = Object(275,50,'zdjecia_interfejs/wybierz.png')
+    tlo = Blank('zdjecia_interfejs/wybierz.png')
+
     tlo.draw_menu(window)
-    tlo_wybierz.draw_object(window)
 
 
-    font = pygame.font.Font(None, 30)
+
+    font = pygame.font.Font(None, 40)
 
     while True:
         button = {}
@@ -224,22 +240,22 @@ def choose_own_profil_gui() -> int:
                 if ":" in line:
                     save = line.split(" ")
                     save_dict[int(save[0][0])] = save[1] + " " + save[2]
-        d = 200
+        d = 150
         for key, value in save_dict.items():
-            text = font.render( '{key}: {value}'.format(key= key, value = value), True, [0, 0, 0])
+            text = font.render( '{key}: {value}'.format(key= key, value = value), True, [16, 71, 8])
             window.blit(text, [300,  d])
             button[key] = ButtonWrite(300,  d, value)
-            d += 30
+            d += 40
         pygame.display.update()
 
         for key in button.keys():
             if button[key].tick():
                 pygame.display.update()
-
+                print(key)
                 return key
 
         tlo.draw_menu(window)
-        tlo_wybierz.draw_object(window)
+
 
 
 
@@ -310,16 +326,204 @@ def choose_category_gui() -> int:
             return 3
         elif panstwa_buton.tick():
             return 4
-        elif panstwa_buton.tick():
+        elif losowy_buton.tick():
             return 5
         pygame.display.update()
 
 
+def zasady_gry() -> int:
+    pygame.time.delay(100)
+    tlo = Blank('zdjecia_interfejs/tlo.png')
+    rozpocznij_gre_button = Button(275, 400, "zdjecia_interfejs/przycisk_rozpocznij.png")
+    tlo.draw_menu(window)
+    pygame.display.update()
+
+
+    while True:
+        pygame.time.Clock().tick(FPS_menu)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+        tlo.draw_menu(window)
+        rozpocznij_gre_button.draw(window)
+        font = pygame.font.Font(None, 32)
+        text = 'trzeba wpisac zasady gry' #do dokończenia
+        goto_text = font.render(text, True, [0, 0, 0])
+        window.blit(goto_text, [100,50])
+        if rozpocznij_gre_button.tick():
+            return 1
+
+
+
+        pygame.display.update()
+
+
+def zgadywanie_gui(password, gracz, *args):
+    tak_button = Button(20, 530, 'zdjecia_interfejs/tak.png')
+    nie_button = Button(360,530, 'zdjecia_interfejs/nie.png')
+    font = pygame.font.Font(None, 50)
+    font_game = pygame.font.Font(None, 30)
+    font_result = pygame.font.Font(None, 90)
+    l_zyc = 6
+    text = ""
+    dlugosc_slowa_na_poczatku = len(password)
+    password = password.lower()
+    wynik = []
+    slowo = {}
+    zgadywane = []
+    print(password) # do usunięcia
+    d_slowa = len(password)
+    dict_przekreslnia = {}
+    przekrelsnie = ObjectX('zdjecia_interfejs/przekreslenie.png')
+    pygame.time.delay(100)
+    tlo={ 6: Blank('zdjecia_interfejs/pocz_gry.png'),5: Blank('zdjecia_interfejs/1_zycie.png'),4: Blank('zdjecia_interfejs/2_zycia.png'),3: Blank('zdjecia_interfejs/3_zycia.png'),
+           2: Blank('zdjecia_interfejs/4_zycia.png'),1: Blank('zdjecia_interfejs/5_zyc.png'),0: Blank('zdjecia_interfejs/6_zyc.png')}
+    tlo[l_zyc].draw_menu(window)
+
+
+    for i in range(0, d_slowa):
+        slowo[i] = password[i]
+        wynik.extend("_")
+
+    for char in wynik:
+        text +=  "  "+char
+    goto_text = font.render(text, True, [0, 0, 0])
+    window.blit(goto_text, [400, 100])
+
+    text_gamer_1 = 'Gracz: {0}'.format(gracz[0] + gracz[1])
+    text_gamer_2 = 'Poziom: {0}'.format(args[0])
+    text_gamer_3 = 'Kategoria: {0}'.format(args[1])
+    goto_text_gamer_1 = font_game.render(text_gamer_1, True, [79, 79, 79])
+    goto_text_gamer_2 = font_game.render(text_gamer_2, True, [79, 79, 79])
+    goto_text_gamer_3 = font_game.render(text_gamer_3, True, [79, 79, 79])
+    window.blit(goto_text_gamer_1, [100, 20])
+    window.blit(goto_text_gamer_2, [100, 40])
+    window.blit(goto_text_gamer_3, [100, 60])
+
+
+
+    slownik_liter = {1:"a", 2:"b", 3:"c",4:"d", 5:"e",6:"f", 7:"g", 8:"h",9:"i", 10:"j",
+                     11:"k", 12:"l",13:"m", 14:"n", 15:"o",16:"p", 17:"r", 18:"s",
+                     19:"t", 20:"u",21:"q", 22:"w", 23:"y", 24: "z"}
+
+
+    while l_zyc > 0 and d_slowa > 0:
+        pygame.time.Clock().tick(FPS_menu)
+        traf = 0
+        ilosc_trafionych_liter = 0
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+        x = 40
+        y = 107
+        key = 1
+        literka={}
+        wpisany_znak =""
+        for i in range(0,5):
+            for j in range(0, 5):
+                if i == 4 and j == 3:
+                    continue
+                literka[key] = ButtonGuess(x,y)
+                if literka[key].tick():
+                    pygame.time.delay(300)
+                    wpisany_znak = slownik_liter[key]
+                    if wpisany_znak in zgadywane:
+                        continue
+                    else:
+                        zgadywane.extend(wpisany_znak)
+                    for key, value in slowo.items():
+                        if value == wpisany_znak:
+                            wynik[key] = value
+                            print(wynik) # do usu
+                            traf = 1
+                            ilosc_trafionych_liter += 1
+                    if traf == 1:
+                        print("trafiony!") # do usunięcia
+                        d_slowa = d_slowa - ilosc_trafionych_liter
+                    else:
+                        print("pudło!") # do usunięcia
+                        l_zyc = l_zyc - 1
+                    tlo[l_zyc].draw_menu(window)
+                    if l_zyc > 0 and d_slowa > 0:
+                        window.blit(goto_text_gamer_1, [100, 20])
+                        window.blit(goto_text_gamer_2, [100, 40])
+                        window.blit(goto_text_gamer_3, [100, 60])
+                    pygame.display.update()
+
+
+                    text = ""
+                    goto_text = font.render(text, True, [0, 0, 0])
+                    window.blit(goto_text, [400, 100])
+                    for char in wynik:
+                        text += "  " + char
+                    goto_text = font.render(text, True, [0, 0, 0])
+                    window.blit(goto_text, [400, 100])
+                    pygame.display.update()
+
+                    print(text)
+                    ilosc = len(dict_przekreslnia)
+                    dict_przekreslnia[ilosc] = [x, y]
+
+
+                    for el in dict_przekreslnia.values():
+                        przekrelsnie.draw_object(window, el[0] , el[1])
+                    pygame.display.update()
+
+
+                key += 1
+
+                x+=62
+            y += 58+i
+            x = 40
+
+
+        pygame.display.update()
+
+    if l_zyc > 0:
+        text_result = "!!!WYGRAŁEŚ!!!"
+        goto_result = font_result.render(text_result, True, [37, 26, 7])
+        window.blit(goto_result, [170, 10])
+        pygame.display.update()
+    else:
+        text_result = "PRZEGRAŁEŚ :( "
+        goto_result = font_result.render(text_result, True, [37, 26, 7])
+        window.blit(goto_result, [170, 10])
+
+    pygame.display.update()
+    uzyskany_wynik = make_result(l_zyc, d_slowa, dlugosc_slowa_na_poczatku)
+    text_uzyskany_wynik = 'Zdobyte punkty: {0}'.format(uzyskany_wynik)
+    goto_uzyskany_wynik = font.render(text_uzyskany_wynik, True, [37, 26, 7])
+    window.blit(goto_uzyskany_wynik, [50, 450])
+    pygame.display.update()
+
+
+    pyatnie = "Czy chcesz zagrać jeszcze raz?"
+    goto_pytanie = font_game.render(pyatnie, True, [0, 0, 0])
+    window.blit(goto_pytanie, [160, 500])
+    tak_button.draw(window)
+    nie_button.draw(window)
+    pygame.display.update()
+
+    tak_button.draw(window)
+    nie_button.draw(window)
+    pygame.display.update()
 
 
 
 
+    while True:
+        pygame.time.Clock().tick(FPS_menu)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
 
+        if tak_button.tick():
+            result = [uzyskany_wynik, 0]
+            return result
+        elif nie_button.tick():
+            result = [uzyskany_wynik, 1]
+            return result
+        pygame.display.update()
 
 
 
