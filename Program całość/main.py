@@ -93,7 +93,6 @@ def choose_category(dostepne_kategorie: dict):
     if kategoria == 5:
 
         losowy = random.randint(1, 4)
-        print("Wybraliśmy za ciebie kategorie: ", dostepne_kategorie[losowy])
         kategoria = losowy
 
     kategotia = dostepne_kategorie[kategoria]
@@ -109,7 +108,6 @@ def choose_level(dostepne_poziomy: dict):
     global poziom
     pygame.display.update()
     trudnosc = choose_level_gui()
-    print(trudnosc)
     if trudnosc == 4:
         losowy = random.randint(1,3)
         trudnosc = losowy
@@ -122,7 +120,7 @@ def choose_level(dostepne_poziomy: dict):
 def start() ->int:
     global aktualny_gracz
     global lista_zapisanych_graczy
-    dostepne_poziomy = {1: "Łatwy poziom trudności", 2: "Średni poziom trudnośći", 3: "Wysoki poziom trudności"}
+    dostepne_poziomy = {1: "Łatwy poziom trudności", 2: "Sredni poziom trudności", 3: "Wysoki poziom trudności"}
     dostepne_kategorie = {1: "Zwierzeta", 2: "Rzeczy", 3: "Owoce i Warzywa", 4: "Panstwa"}
 
     begin_game()
@@ -136,12 +134,12 @@ def start() ->int:
 
     tworzenie = ask_creat_account()
     if tworzenie == 0:
-        aktualny_gracz = choose_own_profil()
-        print("Witaj! ",lista_zapisanych_graczy[str(aktualny_gracz)][0] + " " + lista_zapisanych_graczy[str(aktualny_gracz)][1])
-        if aktualny_gracz == 0:
-            nick = input("Aby stworzyć gracza wpisz imie i nazwisko:")
-            nick = nick.split(" ")
-            creat_account(nick[0], nick[1])
+        gracz = choose_own_profil()
+        if gracz != 0:
+            aktualny_gracz = gracz
+
+
+
 
     ask_next_game = 1
     while ask_next_game == 1:
@@ -161,7 +159,6 @@ def guess_password(password) -> int:
     global poziom
     gracz = lista_zapisanych_graczy[str(aktualny_gracz)]
     uzyskany_wynik = zgadywanie_gui(password, gracz, poziom, kategotia)
-    print(uzyskany_wynik)
     save_result(uzyskany_wynik[0])
     end_game(uzyskany_wynik[1])
     poziom = ""
@@ -194,8 +191,16 @@ def to_test(x, y) -> None:
 def choose_own_profil() -> int:
     wybor = choose_own_profil_gui()
     pygame.display.update()
-    print(wybor)
-    # wybor = input("Wpisz liczbę całkowitą występującą obok twojego niku,\nJeśli się nie znalazłeś wpisz 0: ")
+    if wybor == 0:
+        nick = creat_account_gui()
+        nick = str(nick)
+        if nick.find(" ") == -1:
+            nick_1 = [nick]
+            creat_account(nick_1[0], "")
+
+        else:
+            nick = nick.split(" ")
+            creat_account(nick[0], nick[1])
     return int(wybor)
 #************************************************************************************************
 
@@ -225,7 +230,6 @@ def creat_account(name: Optional[str], surname: Optional[str]) -> None:
     liczba_graczy = len(lista_zapisanych_graczy)
     lista_zapisanych_graczy[str(liczba_graczy+1)] = [name, surname, 0]
     aktualny_gracz = liczba_graczy + 1
-    print("Witaj! ", lista_zapisanych_graczy[str(aktualny_gracz)][0] +" "+ lista_zapisanych_graczy[str(aktualny_gracz)][1])
 #***************************WCZYTANIE ZAPISANYCH WYNIKÓW*****************************************************
 def begin_game() -> None:
     with open("Zapis i Odczyt") as file:

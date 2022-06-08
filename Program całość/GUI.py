@@ -158,10 +158,10 @@ def ranking(lista_zapisanych_graczy) -> int:
                 if lista_zapisanych_graczy_pomocnicza[key][2] > aktualny_wartosc:
                     aktualny_wartosc = lista_zapisanych_graczy_pomocnicza[key][2]
                     max_key = key
-            text = font.render('{0:4d}. {1:30s}'.format(miejsce, lista_zapisanych_graczy[str(max_key)][0] +" "+ lista_zapisanych_graczy[str(max_key)][1]), False, [128, 64, 255])
-            wynik = font.render('{0:}'.format(aktualny_wartosc), False, [128, 64, 255])
+            text = font.render('{0:4d}. {1:40s}'.format(miejsce, lista_zapisanych_graczy[str(max_key)][0] +" "+ lista_zapisanych_graczy[str(max_key)][1]), False, [128, 64, 255])
+            wynik = font.render('{0:>5}'.format(aktualny_wartosc), False, [128, 64, 255])
             miejsce += 1
-            window.blit(text, [250, y_pos])
+            window.blit(text, [215, y_pos])
             window.blit(wynik, [500, y_pos])
             del lista_zapisanych_graczy_pomocnicza[str(max_key)]
             y_pos += 29
@@ -231,6 +231,7 @@ def choose_own_profil_gui() -> int:
         button = {}
         save_dict = {}
         pygame.time.Clock().tick(FPS_menu)
+        nie_ma_konta_button = Button(500, 500,'zdjecia_interfejs/nie_ma_konta.png')
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
@@ -240,19 +241,21 @@ def choose_own_profil_gui() -> int:
                 if ":" in line:
                     save = line.split(" ")
                     save_dict[int(save[0][0])] = save[1] + " " + save[2]
-        d = 150
+        d = 135
         for key, value in save_dict.items():
             text = font.render( '{key}: {value}'.format(key= key, value = value), True, [16, 71, 8])
             window.blit(text, [300,  d])
             button[key] = ButtonWrite(300,  d, value)
             d += 40
+        nie_ma_konta_button.draw(window)
         pygame.display.update()
 
         for key in button.keys():
             if button[key].tick():
                 pygame.display.update()
-                print(key)
                 return key
+            elif nie_ma_konta_button.tick():
+                return 0
 
         tlo.draw_menu(window)
 
@@ -262,7 +265,7 @@ def choose_own_profil_gui() -> int:
 def choose_level_gui() -> int:
     pygame.time.delay(100)
     tlo = Blank('zdjecia_interfejs/poziom_trudnosci.png')
-    x = 200
+    x = 154
     latwy_button = Button(275, x, "zdjecia_interfejs/przycisk_latwy.png")
     sredni_buton = Button(275, x + 75, "zdjecia_interfejs/przycisk_sredni.png")
     trudny_buton = Button(275, x + 75 + 75, "zdjecia_interfejs/przycisk_trudny.png")
@@ -344,12 +347,28 @@ def zasady_gry() -> int:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
+        y = 70
         tlo.draw_menu(window)
         rozpocznij_gre_button.draw(window)
-        font = pygame.font.Font(None, 32)
-        text = 'trzeba wpisac zasady gry' #do dokończenia
-        goto_text = font.render(text, True, [0, 0, 0])
-        window.blit(goto_text, [100,50])
+        font = pygame.font.Font(None, 50)
+        text = 'Masz 6 żyć i nieograniczony czas, a'
+        goto_text = font.render(text, True, [131,73, 29])
+        window.blit(goto_text, [110,y])
+        text = 'wraz z błędną odpowiedzią tracisz jedno'
+        goto_text = font.render(text, True, [131,73, 29])
+        window.blit(goto_text, [55, y+50])
+        text = 'Status życia reprezentuje ilość'
+        goto_text = font.render(text, True, [131,73, 29])
+        window.blit(goto_text, [132, y+100])
+        text = 'elementów ciała bohatera na szubienicy'
+        goto_text = font.render(text, True, [131,73, 29])
+        window.blit(goto_text, [55, y+150])
+        text = 'Ilość kresek na ekranie gry'
+        goto_text = font.render(text, True, [131,73, 29])
+        window.blit(goto_text, [178, y+200])
+        text = 'oznacza liczbę liter w haśle'
+        goto_text = font.render(text, True, [131,73, 29])
+        window.blit(goto_text, [165, y+250])
         if rozpocznij_gre_button.tick():
             return 1
 
@@ -371,7 +390,6 @@ def zgadywanie_gui(password, gracz, *args):
     wynik = []
     slowo = {}
     zgadywane = []
-    print(password) # do usunięcia
     d_slowa = len(password)
     dict_przekreslnia = {}
     przekrelsnie = ObjectX('zdjecia_interfejs/przekreslenie.png')
@@ -379,6 +397,7 @@ def zgadywanie_gui(password, gracz, *args):
     tlo={ 6: Blank('zdjecia_interfejs/pocz_gry.png'),5: Blank('zdjecia_interfejs/1_zycie.png'),4: Blank('zdjecia_interfejs/2_zycia.png'),3: Blank('zdjecia_interfejs/3_zycia.png'),
            2: Blank('zdjecia_interfejs/4_zycia.png'),1: Blank('zdjecia_interfejs/5_zyc.png'),0: Blank('zdjecia_interfejs/6_zyc.png')}
     tlo[l_zyc].draw_menu(window)
+    l_zyc = 6
 
 
     for i in range(0, d_slowa):
@@ -390,7 +409,7 @@ def zgadywanie_gui(password, gracz, *args):
     goto_text = font.render(text, True, [0, 0, 0])
     window.blit(goto_text, [400, 100])
 
-    text_gamer_1 = 'Gracz: {0}'.format(gracz[0] + gracz[1])
+    text_gamer_1 = 'Gracz: {0}'.format(gracz[0] + " "+ gracz[1])
     text_gamer_2 = 'Poziom: {0}'.format(args[0])
     text_gamer_3 = 'Kategoria: {0}'.format(args[1])
     goto_text_gamer_1 = font_game.render(text_gamer_1, True, [79, 79, 79])
@@ -434,14 +453,11 @@ def zgadywanie_gui(password, gracz, *args):
                     for key, value in slowo.items():
                         if value == wpisany_znak:
                             wynik[key] = value
-                            print(wynik) # do usu
                             traf = 1
                             ilosc_trafionych_liter += 1
                     if traf == 1:
-                        print("trafiony!") # do usunięcia
                         d_slowa = d_slowa - ilosc_trafionych_liter
                     else:
-                        print("pudło!") # do usunięcia
                         l_zyc = l_zyc - 1
                     tlo[l_zyc].draw_menu(window)
                     if l_zyc > 0 and d_slowa > 0:
@@ -460,7 +476,6 @@ def zgadywanie_gui(password, gracz, *args):
                     window.blit(goto_text, [400, 100])
                     pygame.display.update()
 
-                    print(text)
                     ilosc = len(dict_przekreslnia)
                     dict_przekreslnia[ilosc] = [x, y]
 
