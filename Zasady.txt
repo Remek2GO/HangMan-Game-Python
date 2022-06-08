@@ -1,9 +1,4 @@
-
 Zasady Gry:
-
-W pierwszej kolejności gracz wybiera poziom trudność oraz kategorię hasła. W
-kolejnym etapie poprzez przycisk start rozpoczyna grę. Na ekranie pojawi się 
-"szybienica" oraz poziome kreski. Kreski oznaczają ilu literowe jest hasło,
-natomiast szubienica życie które nam pozostały (kolejna część ciała to 
-kolejne utracone życie). Aby wygrać należy odgadnąć wszystkie litery bez 
-utracenia wszystkich sześciu żyć.
+Masz 6 żyć i nieograniczony czas, wraz z błędną odpowiedzią tracisz jedno. 
+Status życia reprezentuje ilość elementów ciała bohatera na szubienicy.
+Ilość kresek na ekranie gry oznacza liczbę liter w haśle.
