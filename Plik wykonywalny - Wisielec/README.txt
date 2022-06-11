@@ -1,0 +1,1 @@
+Folder zawiera plik wykonywalny gry wisielec. Aby uruchomić grę należy dwukrotnie wcisnąć przycisk z ikoną(uśmiechnięta buzia na zółtym tle). Grę obsługuje się myszką. Klawiatura wykorzystywana jest jedynie do tworzenia nowych graczy(wpisanie nicku).
